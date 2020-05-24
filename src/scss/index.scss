@@ -1,4 +1,29 @@
-$red : red;
-body{
-	background-color: $red;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+@import "~normalize.css";
+
+@import "header";
+@import "toolbar";
+@import "formula";
+@import "table";
+@import "dashboard";
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
+
+body {
+	font-family: 'Montserrat', sans-serif;
+	font-size: 14px;
+}
+
+.container{
+	max-width: 95%;
+	margin: 0 auto;
+}
+.excel {
+  	position: relative;
+}
+
+
