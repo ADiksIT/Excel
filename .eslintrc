@@ -10,7 +10,11 @@
 		"require-jsdoc" : "off",
 		"no-tabs" : "off",
 		"indent" : "off",
-		"eol-last" : "off"
+		"eol-last" : "off",
+		"object-curly-spacing" : "off",
+		"operator-linebreak" : "off",
+		"no-debugger" : "off",
+		"no-unused-vars" : "off"
 	},
 	"extends": ["eslint:recommended", "google"]
 }
