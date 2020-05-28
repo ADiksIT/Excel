@@ -15,6 +15,7 @@ const jsLoaders = () => {
 			loader: 'babel-loader',
 			options: {
 				presets: ['@babel/preset-env'],
+				plugins: ['@babel/plugin-syntax-class-properties', 'transform-class-properties'],
 			},
 		},
 	];
@@ -55,6 +56,7 @@ module.exports = {
 				collapseWhitespace: isProd,
 			},
 		}),
+
 		// new CopyPlugin([
 		// {
 		// 	from: path.resolve(__dirname, 'src/favicon.ico'),
