@@ -2,26 +2,41 @@ const CODES = {
 	A: 65,
 	Z: 90,
 };
-const toCell = () => '<div class="cell" contenteditable ></div>';
+const toCell = (_, index) => {
+	return `<div class="cell" 
+			contenteditable data-id="${index}">
+			</div>
+		`;
+};
 
 const createCells = (countCols) => {
-	const cells = new Array(countCols)
+	return new Array(countCols)
 		.fill('')
 		.map(toCell)
 		.join('');
-	return cells;
 };
 
-const toColumn = (char) => {
+const toColumn = (char, index) => {
+	//	added class no-copy
 	return `
-		<div class="column">${char}</div>
+		<div class="column unselectable" data-type="resized" data-id="${index}">
+			${char}
+			<div class="col-resize" data-resize="col"></div>
+		</div>
 	`;
 };
 
 const createRow = (content, index = '') => {
+	const resized = index
+		? '<div class="row-resize" data-resize="row" ></div>'
+		: '';
+		//	added class no-copy
 	return `
-		<div class="row">
-			<div class="row-info">${index}</div>
+		<div class="row" data-type="resized">
+			<div class="row-info unselectable"  >
+				${index}
+				${resized}
+			</div>
 			<div class="row-data">${content}</div>
 		</div>
 	`;
