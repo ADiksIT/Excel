@@ -31,8 +31,17 @@ class Dom {
 	off(type, callback) {
 		this.$el.removeEventListener(type, callback);
 	}
+	addClass(className) {
+		this.$el.classList.add(className);
+	}
+	removeClass(className) {
+		this.$el.classList.remove(className);
+	}
 	queryAll(selector) {
 		return this.$el.querySelectorAll(selector);
+	}
+	queryElement(selector) {
+		return $(this.$el.querySelector(selector));
 	}
 	append(node) {
 		if (node instanceof Dom) {

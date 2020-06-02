@@ -27,7 +27,7 @@ export function initResize(event, $root) {
         document.onmousemove = null;
         document.onmouseup = null;
         if (type === 'col') {
-            $root.queryAll(`[data-id="${$parent.data.id}"]`)
+            $root.queryAll(`[data-col="${$parent.data.col}"]`)
                 .forEach((cell) => cell.style.width = value + 'px');
         } else {
             $parent.css({height: value + 'px'});
