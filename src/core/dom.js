@@ -1,4 +1,3 @@
-// utils al9 jQuery
 class Dom {
 	constructor(selector) {
 		this.$el = typeof selector === 'string'
@@ -33,9 +32,11 @@ class Dom {
 	}
 	addClass(className) {
 		this.$el.classList.add(className);
+		return this;
 	}
 	removeClass(className) {
 		this.$el.classList.remove(className);
+		return this;
 	}
 	queryAll(selector) {
 		return this.$el.querySelectorAll(selector);
@@ -62,11 +63,23 @@ class Dom {
 	closest(selector) {
 		return $(this.$el.closest(selector));
 	}
-
+	text(text) {
+		if (typeof text === 'string') {
+			this.$el.textContent = text;
+			return this;
+		}
+		if (this.$el.tagName.toLowerCase() === 'input') {
+			return this.$el.value.trim();
+		}
+		return this.$el.textContent.trim();
+	}
 	getCoords() {
 		return this.$el.getBoundingClientRect();
 	}
-
+	focus() {
+		this.$el.focus();
+		return this;
+	}
 	id(parse) {
 		if (parse) {
 			const parsed = this.id().split(':');

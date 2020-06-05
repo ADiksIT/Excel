@@ -1,26 +1,39 @@
+import { $ } from '@core/dom';
+import { TableSelection } from './TableSelection';
 import { ExcelComponent } from '@core/ExcelComponent';
 import { createTable } from './table.template';
 import { initResize } from '@/components/table/risezer';
-import { TableSelection } from './TableSelection';
-import { $ } from '@core/dom';
-import { selectedCells } from '@/components/table/selectCells';
+import { matrix, nextCell } from '@/components/table/selectCells';
 
 export class Table extends ExcelComponent {
   static className = 'excel__table';
-  constructor($root) {
+  constructor($root, options) {
     super($root, {
-      listeners: ['mousedown'],
+      name: 'Table',
+      listeners: ['mousedown', 'keydown', 'input'],
+      ...options,
     });
   }
+  prepare() {
+    super.prepare();
+    this.selection = new TableSelection();
+  }
+
   toHTML() {
     return createTable(10);
   }
 
   init() {
     super.init();
-    this.selection = new TableSelection();
-    const $cell = this.$root.queryElement(`[data-id="${0}:${0}"]`);
-    this.selection.select($cell);
+    this.selectCell(this.$root.queryElement(`[data-id="0:0"]`));
+
+    this.$onSubscribe('formula:input', (text) => {
+      this.selection.current.text(text);
+    });
+
+    this.$onSubscribe('formula:done', () => {
+      this.selection.current.focus();
+    });
   }
 
   onMousedown(event) {
@@ -29,18 +42,30 @@ export class Table extends ExcelComponent {
     }	else if (event.target.dataset.type === 'cell') {
       const $target = $(event.target);
       if (event.shiftKey) {
-        // const target = $target.id(true);
-        // const current = this.selection.current.id(true);
-        // const cols = range(current.col, target.col);
-        selectedCells(event, this);
+        const $cells = matrix($target, this.selection.current)
+            .map((id) => this.$root.queryElement(`[data-id="${id}"]`));
+        this.selection.selectGroup($cells);
+      } else {
+        this.selection.select($target);
       }
-      this.selection.select($target);
     }
   }
+  onKeydown(event) {
+    const keys = ['Tab', 'Enter', 'ArrowLeft',
+      'ArrowRight', 'ArrowUp', 'ArrowDown'];
+    if (keys.includes(event.key) && !event.shiftKey) {
+      event.preventDefault();
+      const id = this.selection.current.id(true);
+      const $next = this.$root.queryElement(nextCell(event.key, id));
+      this.selectCell($next);
+    }
+  }
+  onInput(event) {
+    this.$trigger('table:input', $(event.target));
+  }
+
+  selectCell($cell) {
+    this.selection.select($cell);
+    this.$trigger('table:select', $cell);
+  }
 }
-//
-// const range = (start, end) => {
-//   return new Array(end - start + 1)
-//       .fill('')
-//       .map((_, index) => start + index);
-// };

@@ -1,15 +1,20 @@
 import { $ } from '@core/dom';
+import { Observer } from '@core/Observer';
 export class Excel {
 	constructor(selector, options) {
 		this.$elem = $(selector);
 		this.components = options.components || [];
+		this.observer = new Observer();
 	}
 
 	getRoot() {
 		const $root = $.create('div', 'excel');
+		const componentOptions = {
+			observer: this.observer,
+		};
 		this.components = this.components.map((Component) => {
 			const $elem = $.create('div', Component.className);
-			const component = new Component($elem);
+			const component = new Component($elem, componentOptions);
 			// DEBUG
 			// if (component.name) {
 			// 	window['c' + component.name] = component;
@@ -24,5 +29,9 @@ export class Excel {
 	render() {
 		this.$elem.append(this.getRoot());
 		this.components.forEach((component) => component.init());
+	}
+
+	destroy() {
+		this.components.forEach((component) => component.destroy());
 	}
 }

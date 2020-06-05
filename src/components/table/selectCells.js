@@ -1,29 +1,33 @@
-export const selectedCells = (event, obj) => {
-  const coordsStart = event.path[0].dataset.id;
-  const matrix = [];
-  const a = +(coordsStart.slice(0, 1));
-  const b = +(coordsStart.slice(2));
-  matrix.push([a, b]);
-  console.log('a, b: ', matrix);
-  document.onmouseup = (e) => {
-    const coordsEnd = e.path[0].dataset.id;
-    const c = +(coordsEnd.slice(0, 1));
-    const d = +(coordsEnd.slice(2));
-    matrix.push([c, d]);
-    console.log('c, d: ', matrix);
-    console.log(matrix);
-    if (a > c) {
-      console.log('a: ', a, 'c: ', c);
-      matrix.reverse();
-    }
-    const $elements = [];
-    for (let i = matrix[0][0]; i <= matrix[1][0]; i++) {
-      for (let j = matrix[0][1]; j <= matrix[1][1]; j++) {
-        const id = `${i}:${j}`;
-        $elements.push(obj.$root.queryElement(`[data-id="${id}"]`));
-      }
-    }
-    obj.selection.selectGroup($elements);
-    document.onmouseup = null;
-  };
+import {range} from '@core/utils';
+
+export const matrix = ($target, $current) => {
+  const target = $target.id(true);
+  const current = $current.id(true);
+  const cols = range(current.col, target.col);
+  const rows = range(current.row, target.row);
+  return cols.reduce((acc, col) => {
+    rows.forEach((row) => acc.push(`${row}:${col}`));
+    return acc;
+  }, []);
+};
+
+export const nextCell = (key, {row, col}) => {
+  const MIN = 0;
+  switch (key) {
+    case 'Tab':
+    case 'ArrowRight':
+      col++;
+      break;
+    case 'ArrowUp':
+      row = row - 1 < MIN ? MIN : row - 1;
+      break;
+    case 'ArrowLeft':
+      col = col - 1 < MIN ? MIN : col - 1;
+      break;
+    case 'Enter':
+    case 'ArrowDown':
+      row++;
+      break;
+  }
+  return `[data-id="${row}:${col}"]`;
 };
