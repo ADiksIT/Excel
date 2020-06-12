@@ -5,6 +5,14 @@ export class TableSelection {
 		this.current = null;
 	}
 
+	changeStyle(style) {
+		this.group.forEach((item) => item.css(style));
+	}
+
+	get selectedIds() {
+		return this.group.map(($el) => $el.id());
+	}
+
 	select($elem) {
 		this.clear();
 		this.group.push($elem);

@@ -64,7 +64,7 @@ class Dom {
 		return $(this.$el.closest(selector));
 	}
 	text(text) {
-		if (typeof text === 'string') {
+		if (typeof text !== 'undefined') {
 			this.$el.textContent = text;
 			return this;
 		}
@@ -89,6 +89,21 @@ class Dom {
 			};
 		}
 		return this.data.id;
+	}
+
+	getStyles(style = []) {
+		return style.reduce((res, s) => {
+			res[s] = this.$el.style[s];
+			return res;
+		}, {});
+	}
+	attr(name, value) {
+		if (value) {
+			this.$el.setAttribute(name, value);
+			return this;
+		} else {
+			return this.$el.getAttribute(name);
+		}
 	}
 }
 
