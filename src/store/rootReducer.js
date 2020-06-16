@@ -4,11 +4,13 @@ import {
   TABLE_RESIZE,
   APPLY_STYLE,
   CHANGE_TITLE,
+  UPDATE_DATE,
 } from './types';
 
 export function rootReducer(state, action) {
   let field;
   let val;
+  let now;
   switch (action.type) {
     case TABLE_RESIZE:
       field = action.data.type === 'col' ? 'colState' : 'rowState';
@@ -35,6 +37,9 @@ export function rootReducer(state, action) {
       };
     case CHANGE_TITLE:
       return {...state, appTitle: action.data};
+    case UPDATE_DATE:
+      now = new Date().toJSON();
+      return {...state, date: now};
     default: return state;
   }
 }

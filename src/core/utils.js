@@ -38,6 +38,8 @@ export const toInlineStyles = (styles = {}) => {
 			.join(';');
 };
 
+export const clone = (obj) => JSON.parse(JSON.stringify(obj));
+
 export const debaunce = (fn, wait) => {
 	let timeout;
 	return function(...args) {
